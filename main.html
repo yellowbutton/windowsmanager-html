@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>拖拽</title>
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://libs.baidu.com/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <style>
+        .windowsmenu{
+            position: fixed;
+            justify-content: space-between;
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            height: 30px;
+            background-color: rgb(0, 0, 0);
+            z-index: 10000;
+            padding-top:5px;
+            padding-bottom:5px;
+            display:inline-flex;
+        }
+        .appbt{
+            margin-left:5px;
+            height: 100%;
+            aspect-ratio: 1/1;
+            text-align: center;
+        }
+        .window{
+            position:fixed;
+            border-radius:7px 7px 5px 5px;
+            background-color: grey;
+            position: absolute;
+            box-shadow: rgb(0, 0, 0) 5px 5px 10px 1px;
+            z-index:0;
+        }
+        .head{
+            width: 100%;
+            height: 30px;
+            background-color: rgb(255, 255, 255);
+            z-index: 9999;
+            display:inline-flex;
+            justify-content: space-between;
+            border-radius: 5px 5px 0px 0px;
+        }
+        .inner{
+            margin:5px;
+            display:inline-flex;
+        }
+    </style>
+</head>
+<body style="overflow-x: hidden;overflow-y: hidden;">
+    <div class="window" id="music" onmousedown="totop($(this))" style="width: 300px;height: 100px;top: 150px;left: 200px;">
+        <div class="head" id="musichead">
+            <div class="inner">音乐</div>
+            <div class="inner">
+                <button class="appbt" type="button" onclick="changepage($(this).parent().parent().parent())"></button>
+            </div>
+        </div>
+    </div>
+    <div class="window" id="info" onmousedown="totop($(this))" big=0 w=700 h=500 t=50 l=70 style="width: 700px; height: 500px;top: 50px;left: 70px;">
+        <div class="head" id="infohead" ondblclick="bigpage($(this).parent(),0)">
+            <div class="inner">介绍</div>
+            <div class="inner">
+                <button class="appbt" type="button" onclick="bigpage($(this).parent().parent().parent(),0)"></button>
+                <button class="appbt" type="button" onclick="changepage($(this).parent().parent().parent())"></button>
+            </div>
+        </div>
+    </div>
+    
+
+    </div>
+    <div class="windowsmenu" id="footer">
+        <div class="inner" style="margin:0px">
+            <button class="appbt" type="button" onclick="changepage($('#info'));"><font face="楷体"><strong>i</strong></font></button>
+            <button class="appbt" type="button" onclick="changepage($('#music'));">♬</button>
+        </div>
+        <div class="inner" style="margin:0px">
+            
+        </div>
+    </div>
+    <script>
+        var longest=10;
+        //$('#tuopan').hide();
+        $("#music").hide();
+        $("#music").draggable();
+        //$("#info").hide();
+        $("#info").draggable({stop:function(e){if($("#info").attr("big")==0&&e.clientY<20){bigpage($('#info'),0)}}});
+        /*function opentuopan(){
+            changepage('tuopan');
+            $('#tuopan').show();
+            $('#tuopan').focus();
+            totop($('#tuopan'));
+        }*/
+        function totop(id){
+            longest+=1;
+            id.css('z-index',longest);
+            $("#footer").css('z-index',longest+10);
+        };
+        function bigpage(page,mode){
+            var id=page;
+            //window.alert(id.attr("big")[0]);
+            if (id.attr("big")==0){
+                $(".head").css("border-radius","0px");
+                id.attr("w",id.css("width"));
+                id.attr("h",id.css("height"));
+                id.attr("t",id.css("top"));
+                id.attr("l",id.css("left"));
+                id.css({
+                    "border-radius":"0px",
+                    "width":"100%",
+                    "height":"100%",
+                    "top":"0px",
+                    "left":"0px",
+                });
+                id.draggable({ distance: 50 ,start: function(){bigpage(id,1)}});
+                //window.alert();
+                $(".windowsmenu").animate({top:'+=40px'});
+                id.attr("big",1)
+            }else if(mode==0){
+                $(".head").css("border-radius","5px 5px 0px 0px");
+                id.css({
+                    "border-radius":"7px 7px 5px 5px",
+                    "width":id.attr("w"),
+                    "height":id.attr("h"),
+                    "top":id.attr("t"),
+                    "left":id.attr("l"),
+                });
+                id.attr("big",0);
+                id.draggable({ distance: 0 ,start: function(){}});
+                $(".windowsmenu").animate({top:'+=-40px'});
+            }
+            else{
+                $(".head").css("border-radius","5px 5px 0px 0px");
+                id.css({
+                    "border-radius":"7px 7px 5px 5px",
+                    "width":id.attr("w"),
+                    "height":id.attr("h")
+                });
+                id.attr("big",0);
+                id.draggable({ distance: 0 ,start: function(){}});
+                $(".windowsmenu").animate({top:'+=-40px'});
+            };
+        };
+        function changepage(page){
+            var id=page;
+            if(id.is(":hidden")){
+                id.show();
+                totop(id);
+            }else{
+                if(id.attr("big")==1){
+                    bigpage(id,0);
+                };
+                id.hide();
+            };
+        };
+    </script>
+</body>
+</html>
