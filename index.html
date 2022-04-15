@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>拖拽</title>
+    <link rel="stylesheet" href="http://libs.baidu.com/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/3.2.31/vue.global.js"></script>
+</head>
+
+<body style="overflow-x: hidden;overflow-y: hidden;">
+    <div id="app">
+        <div v-for="i in windows" :key="i.id" :id="i.id" class="window" id="info" @click="totop(this)" big=0 w=700 h=500
+            t=50 l=70 style="width: 700px; height: 500px;top: 50px;left: 70px;">
+            <div class="head" id="infohead" ondblclick="bigpage($(this).parent(),0)">
+                <div class="inner">{{ i.name }}</div>
+                <div class="inner">
+                    <button class="appbt" type="button" @click="bigpage(i.id,0)"></button>
+                    <button class="appbt" type="button"
+                        @click="changepage($(this).parent().parent().parent())"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="windowsmenu" id="footer">
+            <div class="inner" style="margin:0">
+                <button class="appbt" type="button" @click="changepage('#info')">
+                    <strong>i</strong>
+                </button>
+                <!-- <button class="appbt" type="button" onclick="changepage($('#music'));">♬</button> -->
+            </div>
+            <div class="inner" style="margin:0">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+</body>
+
+</html>
